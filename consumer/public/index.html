@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>RabbitMQ Consumer</title>
+</head>
+<body>
+  <h1>RabbitMQ Consumer</h1>
+
+  <section>
+    <h2>Last Received Message</h2>
+    <div>
+      <p><strong>ID:</strong> <span id="lastMessageId">No message yet</span></p>
+      <p><strong>Body:</strong> <span id="lastMessageBody">No message yet</span></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>All Received Messages</h2>
+    <table border="1" id="messagesTable">
+      <thead>
+        <tr>
+          <th>Time Received</th>
+          <th>Message ID</th>
+          <th>Message Body</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Rows will be populated by JS -->
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    async function fetchLastMessage() {
+      try {
+        const res = await fetch("/last-message");
+        const data = await res.json();
+        document.getElementById("lastMessageId").textContent = data.lastMessageId || "N/A";
+        document.getElementById("lastMessageBody").textContent = data.lastMessageBody || "N/A";
+      } catch (error) {
+        console.error("Failed to fetch last message:", error);
+      }
+    }
+
+    async function fetchAllMessages() {
+      try {
+        const res = await fetch("/messages");
+        const data = await res.json();
+
+        const tableBody = document.querySelector("#messagesTable tbody");
+        tableBody.innerHTML = ""; // Clear old rows
+
+        data.forEach((msg) => {
+          const row = document.createElement("tr");
+          const timeCell = document.createElement("td");
+          const idCell = document.createElement("td");
+          const bodyCell = document.createElement("td");
+
+          timeCell.textContent = msg.timeReceived;
+          idCell.textContent = msg.messageId;
+          bodyCell.textContent = msg.messageBody;
+
+          row.appendChild(timeCell);
+          row.appendChild(idCell);
+          row.appendChild(bodyCell);
+
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error("Failed to fetch messages list:", error);
+      }
+    }
+
+    // Fetch data every few seconds
+    setInterval(() => {
+      fetchLastMessage();
+      fetchAllMessages();
+    }, 3000);
+
+    // Initial load
+    fetchLastMessage();
+    fetchAllMessages();
+  </script>
+</body>
+</html>

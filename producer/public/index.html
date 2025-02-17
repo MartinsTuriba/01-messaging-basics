@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>RabbitMQ Producer</title>
+</head>
+<body>
+  <h1>RabbitMQ Producer with Custom Message</h1>
+
+  <label for="messageText">Enter your message:</label>
+  <input type="text" id="messageText" placeholder="Type something..." />
+
+  <button id="sendMessageButton">Send Message</button>
+
+  <script>
+    const button = document.getElementById("sendMessageButton");
+    const textInput = document.getElementById("messageText");
+
+    button.addEventListener("click", async () => {
+      try {
+        const userMessage = textInput.value.trim();
+        if (!userMessage) {
+          alert("Please enter a message before sending.");
+          return;
+        }
+
+        // Send the user-entered message to the server
+        const response = await fetch("/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ text: userMessage })
+        });
+
+        const result = await response.text();
+        alert(result);
+        textInput.value = ""; // Clear the input field
+      } catch (error) {
+        alert("Error sending message: " + error);
+      }
+    });
+  </script>
+</body>
+</html>
