@@ -7,7 +7,7 @@
 ## Steps
 
 ### 1. Start RabbitMQ using Docker
-Navigate to the project root directory and run:
+Navigate to the project rabbit-mq directory and run:
 
 ```bash
 docker-compose up -d
