@@ -4,7 +4,7 @@ consumer/node_modules/
 producer/node_modules/
 
 #rabbitmq files
-rabbitmq/rabbitmq_data/
+rabbit-mq/rabbitmq_data/
 
 # Logs
 logs/
