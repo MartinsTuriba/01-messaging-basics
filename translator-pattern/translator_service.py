@@ -15,7 +15,7 @@ def callback(ch, method, properties, body):
         # Translate to XML
         root = ET.Element("person")
         name = ET.SubElement(root, "name")
-        name.text = json_message["name"]
+        name.text = json_message["first_name"]+" "+json_message["last_name"]
         age = ET.SubElement(root, "age")
         age.text = str(json_message["age"])
         xml_message = ET.tostring(root).decode() # Decode from bytes to string
